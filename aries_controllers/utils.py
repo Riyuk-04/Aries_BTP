@@ -2,6 +2,7 @@ from flask import Flask
 from flask import jsonify
 import requests
 import time
+import json
 
     ##Creates and post public DID
     ##SAMPLE RESP : {'result': {'did': 'Hc4GRdjapBrCZf83ypqJGW', 'verkey': 'A3u7HykmMQdv1vsBqiTdMbZVdf6u2Sos4nNuMafMS5Kn', 'posture': 'posted', 'key_type': 'ed25519', 'method': 'sov'}}
@@ -96,10 +97,53 @@ def make_Connection(agent1_admin_port, steward_admin_port):
     except requests.exceptions.HTTPError as errh:
         raise errh
     
-    print(r_accept_req)
+    return steward_conn_id, alice_conn_id
 
+def gen_Schema(agent_admin_port, schema):
+    url_schema = "http://0.0.0.0:" + str(agent_admin_port) + "/schemas"
+    headers_schema = {"accept": "application/json", "Content-Type": "application/json"}
+    payload_schema = str(schema)
 
+    try:
+        r_schema = requests.post(url=url_schema, data=payload_schema, headers=headers_schema)
+        r_schema = r_schema.json()
+    except requests.exceptions.HTTPError as errh:
+        raise errh
+
+    return r_schema
+
+def gen_CredDef(agent_admin_port, credDef):
+    url_CredDef = "http://0.0.0.0:" + str(agent_admin_port) + "/credential-definitions"
+    headers_CredDef = {"accept": "application/json", "Content-Type": "application/json"}
+    payload_CredDef = credDef
+    print(payload_CredDef)
+    try:
+        r_CredDef = requests.post(url=url_CredDef, data=payload_CredDef, headers=headers_CredDef)
+        print(r_CredDef)
+        r_CredDef = r_CredDef.json()
+    except requests.exceptions.HTTPError as errh:
+        raise errh
+
+    return r_CredDef
 
 if __name__ == "__main__":
     # print(create_public_did(9001, 8001))
-    make_Connection(9001, 8001)
+    # print(make_Connection(9001, 8001))
+    sample_schema = {
+  "attributes": [
+    "score"
+  ],
+  "schema_name": "prefs2",
+  "schema_version": "1.0"
+}
+    json_schema = json.dumps(sample_schema)
+    # print(gen_Schema(8001, json_schema))
+
+    sample_CredDef = {
+  "revocation_registry_size": 1000,
+  "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
+  "support_revocation": True,
+  "tag": "default"
+}
+    json_CredDef = json.dumps(sample_CredDef)
+    print(gen_CredDef(8001, json_CredDef))
