@@ -116,10 +116,8 @@ def gen_CredDef(agent_admin_port, credDef):
     url_CredDef = "http://0.0.0.0:" + str(agent_admin_port) + "/credential-definitions"
     headers_CredDef = {"accept": "application/json", "Content-Type": "application/json"}
     payload_CredDef = credDef
-    print(payload_CredDef)
     try:
         r_CredDef = requests.post(url=url_CredDef, data=payload_CredDef, headers=headers_CredDef)
-        print(r_CredDef)
         r_CredDef = r_CredDef.json()
     except requests.exceptions.HTTPError as errh:
         raise errh
@@ -133,7 +131,7 @@ if __name__ == "__main__":
   "attributes": [
     "score"
   ],
-  "schema_name": "prefs2",
+  "schema_name": "prefs",
   "schema_version": "1.0"
 }
     json_schema = json.dumps(sample_schema)
@@ -141,7 +139,7 @@ if __name__ == "__main__":
 
     sample_CredDef = {
   "revocation_registry_size": 1000,
-  "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
+  "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs2:1.0",
   "support_revocation": True,
   "tag": "default"
 }

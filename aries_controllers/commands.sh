@@ -13,6 +13,8 @@ aca-py provision --wallet-type indy --seed 000000000000000000000000Steward1 -e 1
 
 aca-py provision --wallet-type indy -e http://127.0.0.1:9000 --genesis-file /home/ishan/pool1.txn --wallet-name steward1 --wallet-key steward1
 
+--public-invites --auto-ping-connection --auto-accept-invites --auto-accept-requests --auto-respond-presentation-proposal --auto-store-credential --auto-verify-presentation
+
 {
   "auto_remove": true,
   "comment": "string",
