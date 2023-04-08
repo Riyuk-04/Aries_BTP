@@ -4,8 +4,6 @@ import requests
 import time
 import json
 
-    ##Creates and post public DID
-    ##SAMPLE RESP : {'result': {'did': 'Hc4GRdjapBrCZf83ypqJGW', 'verkey': 'A3u7HykmMQdv1vsBqiTdMbZVdf6u2Sos4nNuMafMS5Kn', 'posture': 'posted', 'key_type': 'ed25519', 'method': 'sov'}}
 def create_public_did(agent1_admin_port, steward_admin_port):
     url_create_did = "http://127.0.0.1:" + str(agent1_admin_port) + "/wallet/did/create"
     headers_create_did = {"accept": "application/json", "Content-Type": "application/json"}
@@ -126,7 +124,7 @@ def gen_CredDef(agent_admin_port, credDef):
 
     return r_CredDef
 
-def issue_Cred(steward_admin_port, agent_admin_port, cred):
+def issue_Cred(steward_admin_port, cred):
     url_send_offer = "http://127.0.0.1:" + str(steward_admin_port) + "/issue-credential-2.0/send"
     headers_send_offer = {"accept": "application/json", "Content-Type": "application/json"}
     payload_send_offer = cred
@@ -173,6 +171,88 @@ def send_cred_req(agent_admin_port, agent_did):
 
     return r_send_req
 
+def send_proof_req(steward_admin_port, proof):
+    url_proof_req = "http://127.0.0.1:" + str(steward_admin_port) + "/present-proof-2.0/send-request"
+    headers_proof_req = {"accept": "application/json", "Content-Type": "application/json"}
+    payload_proof_req = proof
+
+    try:
+        r_proof_req = requests.post(url=url_proof_req, data=payload_proof_req, headers=headers_proof_req)
+        if r_proof_req.status_code == 200:
+            r_proof_req = r_proof_req.json()
+        else:
+            print(r_proof_req.text)
+    except Exception as errh:
+        print(errh)
+
+    return r_proof_req
+
+def send_presentation(agent_admin_port):
+    url_fetch_pres = "http://127.0.0.1:" + str(agent_admin_port) + "/present-proof-2.0/records"
+    headers_fetch_pres = {"accept": "application/json"}
+    payload_fetch_pres = {}
+
+    try:
+        r_fetch_pres = requests.get(url=url_fetch_pres, data=payload_fetch_pres, headers=headers_fetch_pres)
+        if r_fetch_pres.status_code == 200:
+            r_fetch_pres = r_fetch_pres.json()
+        else:
+            print(r_fetch_pres.text)
+    except Exception as errh:
+        print(errh)
+
+    pres_ex_id = r_fetch_pres['results'][0]['pres_ex_id']
+
+    url_fetch_cred = "http://127.0.0.1:" + str(agent_admin_port) + "/present-proof-2.0/records/" + str(pres_ex_id) + "/credentials"
+    headers_fetch_cred = {"accept": "application/json"}
+    payload_fetch_cred = {}
+
+    try:
+        r_fetch_cred = requests.get(url=url_fetch_cred, data=payload_fetch_cred, headers=headers_fetch_cred)
+        if r_fetch_cred.status_code == 200:
+            r_fetch_cred = r_fetch_cred.json()
+        else:
+            print(r_fetch_cred.text)
+    except Exception as errh:
+        print(errh)
+
+    print(r_fetch_cred)
+    cred_id = r_fetch_cred[0]['cred_info']['referent']
+
+    presentation = {
+        "indy": {
+            "requested_attributes": {
+            "0_name_uuid": {
+                "cred_id": cred_id,
+                "revealed": True
+            }
+            },
+            "requested_predicates": {
+            },
+            "self_attested_attributes": {
+            },
+            "trace": False
+        },
+        "trace": True
+    }
+
+    json_presentation = json.dumps(presentation)
+
+    url_present_proof = "http://127.0.0.1:" + str(agent_admin_port) + "/present-proof-2.0/records/" + str(pres_ex_id) + "/send-presentation"
+    headers_present_proof = {"accept": "application/json", "Content-Type": "application/json"}
+    payload_present_proof = json_presentation
+
+    try:
+        r_present_proof = requests.post(url=url_present_proof, data=payload_present_proof, headers=headers_present_proof)
+        if r_present_proof.status_code == 200:
+            r_present_proof = r_present_proof.json()
+        else:
+            print(r_present_proof.text)
+    except Exception as errh:
+        print(errh)
+
+    return r_present_proof
+
 if __name__ == "__main__":
     # agent_did = create_public_did(9001, 8001)
     # print(agent_did)
@@ -202,37 +282,69 @@ if __name__ == "__main__":
 
     #####################################################
 
-    sample_cred = {
-        "auto_remove": True,
-        "comment": "string",
-        "connection_id": "b20a154e-6c16-49ec-ba83-bac593c6a47e",
-        "credential_preview": {
-            "@type": "issue-credential/2.0/credential-preview",
-            "attributes": [
-            {
-                "mime-type": "text/plain",
-                "name": "score",
-                "value": "69"
-            }
-            ]
-        },
-        "filter": {
-            "indy": {
-            "cred_def_id": "Th7MpTaRZVRYnPiabds81Y:3:CL:14:default",
-            "issuer_did": "Th7MpTaRZVRYnPiabds81Y",
-            "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
-            "schema_issuer_did": "Th7MpTaRZVRYnPiabds81Y",
-            "schema_name": "prefs",
-            "schema_version": "1.0"
-            }
-        },
-        "trace": True
-    }
+    # sample_cred = {
+    #     "auto_remove": True,
+    #     "comment": "string",
+    #     "connection_id": "34939087-ab1f-4fc4-9ba0-617ea498f416",
+    #     "credential_preview": {
+    #         "@type": "issue-credential/2.0/credential-preview",
+    #         "attributes": [
+    #         {
+    #             "mime-type": "text/plain",
+    #             "name": "score",
+    #             "value": "69"
+    #         }
+    #         ]
+    #     },
+    #     "filter": {
+    #         "indy": {
+    #         "cred_def_id": "Th7MpTaRZVRYnPiabds81Y:3:CL:14:default",
+    #         "issuer_did": "Th7MpTaRZVRYnPiabds81Y",
+    #         "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
+    #         "schema_issuer_did": "Th7MpTaRZVRYnPiabds81Y",
+    #         "schema_name": "prefs",
+    #         "schema_version": "1.0"
+    #         }
+    #     },
+    #     "trace": True
+    # }
 
     # json_Cred = json.dumps(sample_cred)
-    # Cred_resp = issue_Cred(8001, 9001, json_Cred)
+    # Cred_resp = issue_Cred(8001, json_Cred)
     # print(Cred_resp)
+    # time.sleep(0.1)
+    # print(send_cred_req(9001, "J2XEPfYJGSvYDjNGjCfj8J"))
 
-    print(send_cred_req(9001, "7EosWdvAhYnzUJE2YCjiNr"))
+    ############################################################
 
-    #############################################################
+    sample_proof = {
+        "comment": "This is a comment about the reason for the proof",
+        "connection_id": "34939087-ab1f-4fc4-9ba0-617ea498f416",
+        "presentation_request": {
+            "indy": {
+            "name": "Proof of Education",
+            "version": "1.0",
+            "requested_attributes": {
+                "0_name_uuid": {
+                "name": "score",
+                "restrictions": [
+                    {
+                    "cred_def_id": "Th7MpTaRZVRYnPiabds81Y:3:CL:14:default"
+                    }
+                ]
+                }
+            },
+            "requested_predicates": {
+
+            }
+            }
+        }
+    }
+
+    json_proof = json.dumps(sample_proof)
+    # proof_resp = send_proof_req(8001, json_proof)
+    # print(proof_resp)
+    time.sleep(0.1)
+    print(send_presentation(9001))
+
+    ######################################################################
