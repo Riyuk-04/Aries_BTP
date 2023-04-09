@@ -254,68 +254,68 @@ def send_presentation(agent_admin_port):
     return r_present_proof
 
 if __name__ == "__main__":
-    # agent_did = create_public_did(9001, 8001)
-    # print(agent_did)
-    # steward_agent_conn_id, agent_steward_conn_id = make_Connection(9001, 8001)
-    # print(steward_agent_conn_id, agent_steward_conn_id)
+    agent_did = create_public_did(9001, 8001)
+    print(agent_did)
+    steward_agent_conn_id, agent_steward_conn_id = make_Connection(9001, 8001)
+    print(steward_agent_conn_id, agent_steward_conn_id)
 
-    # sample_schema = {
-    #     "attributes": [
-    #         "score"
-    #     ],
-    #     "schema_name": "prefs",
-    #     "schema_version": "1.0"
-    # }
-    # json_schema = json.dumps(sample_schema)
-    # schema = gen_Schema(8001, json_schema)
-    # print(schema)
+    sample_schema = {
+        "attributes": [
+            "score"
+        ],
+        "schema_name": "prefs",
+        "schema_version": "1.0"
+    }
+    json_schema = json.dumps(sample_schema)
+    schema = gen_Schema(8001, json_schema)
+    print(schema)
 
-    # sample_CredDef = {
-    #     "revocation_registry_size": 1000,
-    #     "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
-    #     "support_revocation": False,
-    #     "tag": "default"
-    # }
-    # json_CredDef = json.dumps(sample_CredDef)
-    # CredDef = gen_CredDef(8001, json_CredDef)
-    # print(CredDef)
+    sample_CredDef = {
+        "revocation_registry_size": 1000,
+        "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
+        "support_revocation": False,
+        "tag": "default"
+    }
+    json_CredDef = json.dumps(sample_CredDef)
+    CredDef = gen_CredDef(8001, json_CredDef)
+    print(CredDef)
 
-    #####################################################
+    ####################################################
 
-    # sample_cred = {
-    #     "auto_remove": True,
-    #     "comment": "string",
-    #     "connection_id": "34939087-ab1f-4fc4-9ba0-617ea498f416",
-    #     "credential_preview": {
-    #         "@type": "issue-credential/2.0/credential-preview",
-    #         "attributes": [
-    #         {
-    #             "mime-type": "text/plain",
-    #             "name": "score",
-    #             "value": "69"
-    #         }
-    #         ]
-    #     },
-    #     "filter": {
-    #         "indy": {
-    #         "cred_def_id": "Th7MpTaRZVRYnPiabds81Y:3:CL:14:default",
-    #         "issuer_did": "Th7MpTaRZVRYnPiabds81Y",
-    #         "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
-    #         "schema_issuer_did": "Th7MpTaRZVRYnPiabds81Y",
-    #         "schema_name": "prefs",
-    #         "schema_version": "1.0"
-    #         }
-    #     },
-    #     "trace": True
-    # }
+    sample_cred = {
+        "auto_remove": True,
+        "comment": "string",
+        "connection_id": "34939087-ab1f-4fc4-9ba0-617ea498f416",
+        "credential_preview": {
+            "@type": "issue-credential/2.0/credential-preview",
+            "attributes": [
+            {
+                "mime-type": "text/plain",
+                "name": "score",
+                "value": "69"
+            }
+            ]
+        },
+        "filter": {
+            "indy": {
+            "cred_def_id": "Th7MpTaRZVRYnPiabds81Y:3:CL:14:default",
+            "issuer_did": "Th7MpTaRZVRYnPiabds81Y",
+            "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0",
+            "schema_issuer_did": "Th7MpTaRZVRYnPiabds81Y",
+            "schema_name": "prefs",
+            "schema_version": "1.0"
+            }
+        },
+        "trace": True
+    }
 
-    # json_Cred = json.dumps(sample_cred)
-    # Cred_resp = issue_Cred(8001, json_Cred)
-    # print(Cred_resp)
-    # time.sleep(0.1)
-    # print(send_cred_req(9001, "J2XEPfYJGSvYDjNGjCfj8J"))
+    json_Cred = json.dumps(sample_cred)
+    Cred_resp = issue_Cred(8001, json_Cred)
+    print(Cred_resp)
+    time.sleep(0.1)
+    print(send_cred_req(9001, "J2XEPfYJGSvYDjNGjCfj8J"))
 
-    ############################################################
+    ###########################################################
 
     sample_proof = {
         "comment": "This is a comment about the reason for the proof",
