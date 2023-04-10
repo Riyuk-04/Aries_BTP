@@ -259,7 +259,7 @@ def proof_record(agent_admin_port):
     payload_proof_record = {}
 
     try:
-        r_proof_record = requests.post(url=url_proof_record, data=payload_proof_record, headers=headers_proof_record)
+        r_proof_record = requests.get(url=url_proof_record, data=payload_proof_record, headers=headers_proof_record)
         if r_proof_record.status_code == 200:
             r_proof_record = r_proof_record.json()
         else:
@@ -275,7 +275,7 @@ def see_credentials(agent_admin_port):
     payload_see_creds = {}
 
     try:
-        r_see_creds = requests.post(url=url_see_creds, data=payload_see_creds, headers=headers_see_creds)
+        r_see_creds = requests.get(url=url_see_creds, data=payload_see_creds, headers=headers_see_creds)
         if r_see_creds.status_code == 200:
             r_see_creds = r_see_creds.json()
         else:
