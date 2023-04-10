@@ -253,6 +253,38 @@ def send_presentation(agent_admin_port):
 
     return r_present_proof
 
+def proof_record(agent_admin_port):
+    url_proof_record = "http://127.0.0.1:" + str(agent_admin_port) + "/present-proof-2.0/records"
+    headers_proof_record = {"accept": "application/json"}
+    payload_proof_record = {}
+
+    try:
+        r_proof_record = requests.post(url=url_proof_record, data=payload_proof_record, headers=headers_proof_record)
+        if r_proof_record.status_code == 200:
+            r_proof_record = r_proof_record.json()
+        else:
+            print(r_proof_record.text)
+    except Exception as errh:
+        print(errh)
+
+    return r_proof_record
+
+def see_credentials(agent_admin_port):
+    url_see_creds = "http://127.0.0.1:" + str(agent_admin_port) + "/credentials"
+    headers_see_creds = {"accept": "application/json"}
+    payload_see_creds = {}
+
+    try:
+        r_see_creds = requests.post(url=url_see_creds, data=payload_see_creds, headers=headers_see_creds)
+        if r_see_creds.status_code == 200:
+            r_see_creds = r_see_creds.json()
+        else:
+            print(r_see_creds.text)
+    except Exception as errh:
+        print(errh)
+
+    return r_see_creds
+
 if __name__ == "__main__":
     agent_did = create_public_did(9001, 8001)
     print(agent_did)

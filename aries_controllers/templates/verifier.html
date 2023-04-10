@@ -47,6 +47,21 @@
     <h2>Output:</h2>
 </div>
 </div>
+<div class="row">
+  <h2>Proof Status</h2>
+  <div class="column">
+  <form id="api3-form">
+    <label for="api3-input">Input:</label>
+    <textarea id="api3-input" name="api3-input" rows="10" cols="50"></textarea>
+    <br>
+    <button type="button" onclick="executeApi3()">Execute</button>
+  </form>
+</div>
+<div class="column">
+  <textarea id="api3-output" name="api3-output" rows="10" cols="50" readonly></textarea>
+  <h2>Output:</h2>
+</div>
+</div>
   <script>
     function executeApi1() {
         const input = document.getElementById("api1-input").value;
@@ -71,7 +86,7 @@
     function executeApi2() {
       const input = document.getElementById("api2-input").value;
       // make API 2 call with input
-      fetch("http://127.0.0.1:8080/send_presentation", {
+      fetch("http://127.0.0.1:8080/send_proof_req", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -82,6 +97,26 @@
         .then(data => {
         // Display the response in the api1-output textarea
         document.getElementById("api2-output").value = data;
+        })
+        .catch(error => console.error(error));
+      // handle response and display it in api2-output textarea
+    //   document.getElementById("api2-output").value = "API 2 response";
+    }
+
+    function executeApi3() {
+      const input = document.getElementById("api3-input").value;
+      // make API 2 call with input
+      fetch("http://127.0.0.1:8080/proof_record", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: input
+        })
+        .then(response => response.text())
+        .then(data => {
+        // Display the response in the api1-output textarea
+        document.getElementById("api3-output").value = data;
         })
         .catch(error => console.error(error));
       // handle response and display it in api2-output textarea

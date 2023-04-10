@@ -76,5 +76,17 @@ def send_presentation_endpoint():
     result = send_presentation(agent_admin_port)
     return {'result': result}
 
+@app.route('/proof_record', methods=['POST'])
+def proof_record_endpoint():
+    agent_admin_port = request.json['agent_admin_port']
+    result = proof_record(agent_admin_port)
+    return {'result': result}
+
+@app.route('/see_credentials', methods=['POST'])
+def see_credentials_endpoint():
+    agent_admin_port = request.json['agent_admin_port']
+    result = see_credentials(agent_admin_port)
+    return {'result': result}
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8080, debug=True)
