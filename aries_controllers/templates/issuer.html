@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ABDM/Issuer</title>
+  <style>
+    .column {
+    float: left;
+    width: 50%;
+    }
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+  </style>
+</head>
+<body>
+  <h1>ABDM/Issuer</h1>
+  <div class="row">
+    <h2>Make Connection</h2>
+    <div class="column">
+        <!-- <form id="api1-form"> -->
+          <!-- <label for="api1-input">Input:</label> -->
+          <!-- <textarea id="api1-input" name="api1-input" rows="10" cols="50"></textarea> -->
+          <br>
+          <button type="button" onclick="executeApi1()">Make Connection</button>
+        <!-- </form> -->
+    </div>
+    <div class="column">
+        <textarea id="api1-output" name="api1-output" rows="10" cols="50" readonly></textarea>
+        <h2>Output:</h2>
+    </div>
+  </div>
+  <div class="row">
+    <h2>Generate Schema</h2>
+    <div class="column">
+        <!-- <form id="api2-form"> -->
+          <!-- <label for="api2-input">Input:</label> -->
+          <!-- <textarea id="api2-input" name="api2-input" rows="10" cols="50"></textarea> -->
+          <br>
+          <button type="button" onclick="executeApi2()">Execute</button>
+        <!-- </form> -->
+    </div>
+    <div class="column">
+        <textarea id="api2-output" name="api2-output" rows="10" cols="50" readonly></textarea>
+        <h2>Output:</h2>
+    </div>
+    </div>
+    <div class="row">
+        <h2>Generate CredDef</h2>
+        <div class="column">
+            <!-- <form id="api3-form"> -->
+              <!-- <label for="api3-input">Input:</label> -->
+              <!-- <textarea id="api3-input" name="api3-input" rows="10" cols="50"></textarea> -->
+              <br>
+              <button type="button" onclick="executeapi3()">Execute</button>
+            <!-- </form> -->
+        </div>
+        <div class="column">
+            <textarea id="api3-output" name="api3-output" rows="10" cols="50" readonly></textarea>
+            <h2>Output:</h2>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <h2>Issue Cred</h2>
+        <div class="column">
+            <form id="api4-form">
+              <label for="api4-input">Connection ID:</label>
+              <textarea id="api4-input" name="api4-input"></textarea>
+              <br>
+              <button type="button" onclick="executeapi4()">Execute</button>
+            </form>
+        </div>
+        <div class="column">
+            <textarea id="api4-output" name="api4-output" rows="10" cols="50" readonly></textarea>
+            <h2>Output:</h2>
+        </div>
+        </div>
+  <script>
+    function executeApi1() {
+        // const input = document.getElementById("api1-input").value;
+        // make API 1 call with input
+        const input = '{"agent1_admin_port":9001, "steward_admin_port":8001}';
+        fetch("http://127.0.0.1:8080/make_Connection", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: input
+        })
+        .then(response => response.text())
+        .then(data => {
+        // Display the response in the api1-output textarea
+        document.getElementById("api1-output").value = data;
+        })
+        .catch(error => console.error(error));
+        // handle response and display it in api1-output textarea
+        // document.getElementById("api1-output").value = "API 1 response";
+    }
+
+    function executeApi2() {
+      // const input = document.getElementById("api2-input").value;
+      // make API 2 call with input
+      const input = '{"agent_admin_port":8001,"schema":{"attributes": ["score"],"schema_name": "prefs","schema_version": "1.0"}}';
+      // input = string(input);
+      fetch("http://127.0.0.1:8080/gen_Schema", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: input
+        })
+        .then(response => response.text())
+        .then(data => {
+        // Display the response in the api1-output textarea
+        document.getElementById("api2-output").value = data;
+        })
+        .catch(error => console.error(error));
+      // handle response and display it in api2-output textarea
+    //   document.getElementById("api2-output").value = "API 2 response";
+    }
+
+    function executeapi3() {
+      // const input = document.getElementById("api3-input").value;
+      // make API 2 call with input
+      const input = '{"agent_admin_port":8001,"credDef":{"revocation_registry_size":1000,"schema_id":"Th7MpTaRZVRYnPiabds81Y:2:prefs:1.0","support_revocation":false,"tag":"default"}}';
+      fetch("http://127.0.0.1:8080/gen_CredDef", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: input
+        })
+        .then(response => response.text())
+        .then(data => {
+        // Display the response in the api1-output textarea
+        document.getElementById("api3-output").value = data;
+        })
+        .catch(error => console.error(error));
+      // handle response and display it in api2-output textarea
+    //   document.getElementById("api2-output").value = "API 2 response";
+    }
+
+    function executeapi4() {
+      const input = document.getElementById("api4-input").value;
+      // make API 2 call with input
+      console.log(input)
+      fetch("http://127.0.0.1:8080/issue_Cred", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: input
+        })
+        .then(response => response.text())
+        .then(data => {
+        // Display the response in the api1-output textarea
+        document.getElementById("api4-output").value = data;
+        })
+        .catch(error => console.error(error));
+      // handle response and display it in api2-output textarea
+    //   document.getElementById("api2-output").value = "API 2 response";
+    }
+  </script>
+</body>
+</html>
